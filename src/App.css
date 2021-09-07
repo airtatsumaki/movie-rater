@@ -29,3 +29,8 @@
 .colored-star{
   color: orange;
 }
+
+.rate-container{
+  margin-top: 20px;
+  border-top: 2px solid purple;
+}

@@ -5,7 +5,6 @@ import MovieDetails from './components/movie-details';
 
 
 function App() {
-
   //this is a hooks
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
