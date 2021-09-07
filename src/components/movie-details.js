@@ -10,7 +10,7 @@ function MovieDetails(props){
     const renderStars = props => {
         const avg = theMovie.average_rating;
         const stars = [];
-        for(var x = 1; x <= 5; x++){
+        for(let x = 1; x <= 5; x++){
             avg >= x ? (
                 stars.push(<FontAwesomeIcon icon={solidStar} className="colored-star"/>)
             ) : (
