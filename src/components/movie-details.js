@@ -33,7 +33,7 @@ function MovieDetails(props){
                         ({theMovie.number_of_ratings})
                     </div>
                     <div className="rate-container">
-                        <h2>Rate it</h2>
+                        <h2>Rate {theMovie.title}</h2>
                         {[...Array(5)].map((e) => {
 
                         })
