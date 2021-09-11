@@ -5,11 +5,11 @@
   color: white;
 }
 
-*{
-  /* border: 1px solid red; */
-}
+/* *{
+   border: 1px solid red;
+} */
 
-.movie-title{
+.clickable{
   cursor: pointer;
 }
 
@@ -29,8 +29,23 @@
 .colored-star{
   color: orange;
 }
+.rate-star{
+  color: purple;
+}
 
-/* .rate-container{
-  margin-top: 20px;
-  border-top: 2px solid purple;
-} */
+.rate-container .fa-star{
+  /* margin-top: 20px;
+  border-top: 2px solid purple; */
+  font-size: 1.5rem;
+  /* cursor: pointer; */
+}
+
+.movie-item{
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+}
+
+.movie-item .clickable{
+  font-size: 1.2rem;
+  margin: 16px 5px;
+}

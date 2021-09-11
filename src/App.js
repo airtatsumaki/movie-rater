@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import MovieList from './components/movie-list';
 import MovieDetails from './components/movie-details';
+import MovieForm from './components/movie-form';
 
 
 function App() {
   //this is a hooks
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
+  const [editedMovie, setEditedMovie] =  useState(null);
   // raises CORS error
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
@@ -25,9 +27,25 @@ function App() {
   },[]);
 
   //triggered from the movie-list component's props
-  const movieClicked = theMovie => {
+  const loadMovie = theMovie => {
     setSelectedMovie(theMovie);
-    console.log(theMovie.title);
+    setEditedMovie(null);
+  }
+
+  const editClicked = theMovie => {
+    setEditedMovie(theMovie);
+    setSelectedMovie(null);
+    //console.log(theMovie.title);
+  }
+
+  const updatedMovie = theMovie => {
+    const newMovies = movies.map( movie => {
+      if (movie.id === theMovie.id){
+        return theMovie;
+      }
+      return movie;
+    })
+    setMovies(newMovies);
   }
 
   return (
@@ -36,9 +54,9 @@ function App() {
         <h1>MOVIE RATER</h1>
       </header>
       <div className="layout">
-        <MovieList movies={movies} movieClicked={movieClicked}/>
-        <MovieDetails movie={selectedMovie}/>
-
+        <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked}/>
+        <MovieDetails movie={selectedMovie} updateMovie={loadMovie}/>
+        {editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie}/> : null}
       </div>
     </div>
   );
