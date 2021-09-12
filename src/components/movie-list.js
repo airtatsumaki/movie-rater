@@ -8,7 +8,7 @@ function MovieList(props){
     //telling the user/ parent component to trigger a function called movie clicked
     props.movieClicked(theMovie)
   }
-  const editClicked = theMovie => {
+  const editClicked = theMovie => evt => {
     props.editClicked(theMovie);
     console.log("you clicked edit for movie " + theMovie.title);
   }
@@ -18,7 +18,7 @@ function MovieList(props){
     	  return (
     	  	<div className="movie-item" key={theMovie.id}>
     	  	  <h2 className="clickable" onClick={movieClicked(theMovie)}>{theMovie.title}</h2>
-    	  	  <FontAwesomeIcon className="clickable" icon={faEdit} onClick={() => editClicked(theMovie)} />
+    	  	  <FontAwesomeIcon className="clickable" icon={faEdit} onClick={editClicked(theMovie)} />
     	  	  <FontAwesomeIcon className="clickable" icon={faTrash} />
     	  	</div>
     	  )

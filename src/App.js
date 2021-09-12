@@ -35,7 +35,7 @@ function App() {
   const editClicked = theMovie => {
     setEditedMovie(theMovie);
     setSelectedMovie(null);
-    //console.log(theMovie.title);
+    //console.log(editedMovie);
   }
 
   const updatedMovie = theMovie => {
