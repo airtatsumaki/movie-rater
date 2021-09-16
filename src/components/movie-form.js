@@ -21,6 +21,14 @@ function MovieForm(props){
       .catch(error => console.log(error));
   }
 
+  const createClicked = () => {
+    API.createMovie({title, description})
+    .then(resp => props.movieCreated(resp))
+    //{title, description} - automatically replaced with {title: title, description: description}
+    .catch(error => console.log(error));
+
+}
+
   return (
     <>
     {props.movie ? (
@@ -31,7 +39,14 @@ function MovieForm(props){
         <label htmlFor="description">Description</label><br />
         <textarea id="description" type="text" placeholder="description" value={description}
         onChange={evt => setDescription(evt.target.value)}></textarea><br />
-        <button onClick={updateClicked}>Update</button>
+        {
+          props.movie.id ? (
+            <button onClick={updateClicked}>Update</button>
+          ) :(
+            <button onClick={createClicked}>Create</button>
+          )
+        }
+        
       </div>
     ) : null}
     </>   

@@ -48,15 +48,45 @@ function App() {
     setMovies(newMovies);
   }
 
+  const newMovie = () => {
+    //since editedMovie's state has changed the movie-form component
+    //loads up with this black fields for title and description
+    setEditedMovie({title: '', description: ''});
+    setSelectedMovie(null);
+  }
+
+  const movieCreated = theMovie => {
+    const newMovies = [...movies,theMovie];
+    setMovies(newMovies);
+  }
+
+  // const deleteClicked = theMovie => {
+  //   const newMovies = movies.filter(movie => {
+  //     if(movie.id === theMovie.id){
+  //       return false;
+  //     }
+  //     return true;
+  //   })
+  //   setMovies(newMovies);
+  // }
+
+  const deleteClicked = theMovie => {
+    const newMovies = movies.filter(movie => movie.id !== theMovie.id);
+    setMovies(newMovies);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>MOVIE RATER</h1>
       </header>
       <div className="layout">
-        <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked}/>
+        <div>
+          <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked} deleteClicked={deleteClicked}/>
+          <button onClick={newMovie}>New Movie</button>
+        </div>
         <MovieDetails movie={selectedMovie} updateMovie={loadMovie}/>
-        {editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie}/> : null}
+        {editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie} movieCreated={movieCreated}/> : null}
       </div>
     </div>
   );
