@@ -26,7 +26,6 @@ function MovieForm(props){
     .then(resp => props.movieCreated(resp))
     //{title, description} - automatically replaced with {title: title, description: description}
     .catch(error => console.log(error));
-
 }
 
   return (
