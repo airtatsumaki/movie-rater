@@ -2,8 +2,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../api-service';
+import { useCookies } from 'react-cookie';
 
 function MovieList(props){
+  const [token] = useCookies(['token']);
+
   const movieClicked = theMovie => evt => {
     //this is sending the data up/
     //telling the user/ parent component to trigger a function called movie clicked
@@ -14,7 +17,7 @@ function MovieList(props){
     //console.log("you clicked edit for movie " + theMovie.title);
   }
   const deleteClicked = theMovie => evt => {
-    API.deleteMovie(theMovie.id)
+    API.deleteMovie(theMovie.id, token['token'])
     .then(() => props.deleteClicked(theMovie))
     .catch(error => console.log(error));
   }

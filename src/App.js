@@ -3,6 +3,7 @@ import './App.css';
 import MovieList from './components/movie-list';
 import MovieDetails from './components/movie-details';
 import MovieForm from './components/movie-form';
+import { useCookies } from 'react-cookie';
 
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
   const [editedMovie, setEditedMovie] =  useState(null);
+  const [token] = useCookies(['token']);
+
   // raises CORS error
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
@@ -18,13 +21,25 @@ function App() {
       method: 'GET', 
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token be17769c2231b85acef4e73dd24721b2ef2fef34',
+        'Authorization': `Token ${token['token']}`,
       }
     })
     .then(resp => resp.json())
     .then(resp => setMovies(resp))
     .catch(error => console.log(error))
-  },[]);
+    //added editedMovie and selectedMovie to reender
+    //dependencies. Otherwise the move list/ details would 
+    //on rerender on page refresh
+  },[token, editedMovie, selectedMovie]);
+
+  useEffect(() => {
+    // our token object has a propterty of token: '' inside.
+    // so have to check token['token']
+    console.log(token);
+    if(!token['token']) {
+      window.location.href = "/";
+    }
+  },[token]);
 
   //triggered from the movie-list component's props
   const loadMovie = theMovie => {
@@ -58,6 +73,7 @@ function App() {
   const movieCreated = theMovie => {
     const newMovies = [...movies,theMovie];
     setMovies(newMovies);
+    
   }
 
   // const deleteClicked = theMovie => {
@@ -73,6 +89,10 @@ function App() {
   const deleteClicked = theMovie => {
     const newMovies = movies.filter(movie => movie.id !== theMovie.id);
     setMovies(newMovies);
+    //setting these to null. otherwise deleting only removes from the list
+    //the movie details or movie form components stay on screen.
+    setEditedMovie(null);
+    setSelectedMovie(null);
   }
 
   return (
