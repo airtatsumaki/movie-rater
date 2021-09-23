@@ -6,6 +6,7 @@ import MovieForm from './components/movie-form';
 import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilm, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { useFetch } from './hooks/useFetch';
 
 
 function App() {
@@ -16,25 +17,31 @@ function App() {
   //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
   // blank setToken since we don't need it in this component
   const [token, , deleteToken] = useCookies(['token']);
+  //custom hook
+  const [data, loading, error] = useFetch();
 
+  useEffect(()=>{
+    setMovies(data);
+    console.log('update');
+  }, [data, editedMovie, selectedMovie])
   // raises CORS error
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
-  useEffect(()=>{
-    fetch("http://127.0.0.1:8000/api/movies/",{
-      method: 'GET', 
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${token['token']}`,
-      }
-    })
-    .then(resp => resp.json())
-    .then(resp => setMovies(resp))
-    .catch(error => console.log(error))
-    //added editedMovie and selectedMovie to reender
-    //dependencies. Otherwise the move list/ details would 
-    //on rerender on page refresh
-  },[token, editedMovie, selectedMovie]);
+  // useEffect(()=>{
+  //   fetch("http://127.0.0.1:8000/api/movies/",{
+  //     method: 'GET', 
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Token ${token['token']}`,
+  //     }
+  //   })
+  //   .then(resp => resp.json())
+  //   .then(resp => setMovies(resp))
+  //   .catch(error => console.log(error))
+  //   //added editedMovie and selectedMovie to reender
+  //   //dependencies. Otherwise the move list/ details would 
+  //   //on rerender on page refresh
+  // },[token, editedMovie, selectedMovie]);
 
   useEffect(() => {
     // our token object has a propterty of token: '' inside.
@@ -104,6 +111,8 @@ function App() {
     deleteToken(['token']);
   }
 
+  if(loading) return <h3>Loading...</h3>
+  if(error) return <h3>Error {error}</h3>
   return (
     <div className="App">
       <header className="App-header">
