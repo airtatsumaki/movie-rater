@@ -6,7 +6,7 @@ import MovieForm from './components/movie-form';
 import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilm, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { useFetch } from './hooks/useFetch';
+// import { useFetch } from './hooks/useFetch';
 
 
 function App() {
@@ -14,34 +14,37 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
   const [editedMovie, setEditedMovie] =  useState(null);
+  const [refreshMovies, setRefreshMovies] =  useState(false);
   //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
   // blank setToken since we don't need it in this component
   const [token, , deleteToken] = useCookies(['token']);
   //custom hook
-  const [data, loading, error] = useFetch();
+  // const [data, loading, error] = useFetch();
 
-  useEffect(()=>{
-    setMovies(data);
-    console.log('update');
-  }, [data, editedMovie, selectedMovie])
+  // useEffect(()=>{
+  //   setMovies(data);
+  //   console.log('update');
+  // }, [token, data, editedMovie, selectedMovie])
   // raises CORS error
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
-  // useEffect(()=>{
-  //   fetch("http://127.0.0.1:8000/api/movies/",{
-  //     method: 'GET', 
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': `Token ${token['token']}`,
-  //     }
-  //   })
-  //   .then(resp => resp.json())
-  //   .then(resp => setMovies(resp))
-  //   .catch(error => console.log(error))
-  //   //added editedMovie and selectedMovie to reender
-  //   //dependencies. Otherwise the move list/ details would 
-  //   //on rerender on page refresh
-  // },[token, editedMovie, selectedMovie]);
+  useEffect(()=>{
+    console.log("refresh movies list");
+    fetch("http://127.0.0.1:8000/api/movies/",{
+      method: 'GET', 
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token['token']}`,
+      }
+    })
+    .then(resp => resp.json())
+    .then(resp => setMovies(resp))
+    .then(() => setRefreshMovies(false))
+    .catch(error => console.log(error))
+    //added editedMovie and selectedMovie to render
+    //dependencies. Otherwise the move list/ details would 
+    //on rerender on page refresh
+  },[token, refreshMovies]);
 
   useEffect(() => {
     // our token object has a propterty of token: '' inside.
@@ -57,11 +60,15 @@ function App() {
   const loadMovie = theMovie => {
     setSelectedMovie(theMovie);
     setEditedMovie(null);
+    setRefreshMovies(true);
+    console.log("refreshMovies is : " + refreshMovies);
   }
 
   const editClicked = theMovie => {
     setEditedMovie(theMovie);
     setSelectedMovie(null);
+    setRefreshMovies(true);
+    console.log("refreshMovies is : " + refreshMovies);
     //console.log(editedMovie);
   }
 
@@ -73,11 +80,12 @@ function App() {
       return movie;
     })
     setMovies(newMovies);
+    setRefreshMovies(true);
   }
 
   const newMovie = () => {
     //since editedMovie's state has changed the movie-form component
-    //loads up with this black fields for title and description
+    //loads up with these blank fields for title and description
     setEditedMovie({title: '', description: ''});
     setSelectedMovie(null);
   }
@@ -111,8 +119,8 @@ function App() {
     deleteToken(['token']);
   }
 
-  if(loading) return <h3>Loading...</h3>
-  if(error) return <h3>Error {error}</h3>
+  // if(loading) return <h3>Loading...</h3>
+  // if(error) return <h3>Error {error}</h3>
   return (
     <div className="App">
       <header className="App-header">
