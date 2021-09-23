@@ -9,6 +9,7 @@ function Auth(){
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginView, setIsLoginView] = useState(true);
+  const isDisabled = username.length === 0 || password.length === 0;
 
   //token and setToken are passed to this component via the 
   //TokenContext component witin index.js
@@ -40,10 +41,12 @@ function Auth(){
   }
 
   return (
-    <div className="App centerMe">
+    <div className="App">
       {!token['token'] ? (
         <div className="login">
-          {isLoginView ? (<h1>Login</h1>) : (<h1>Register</h1>) }
+          <header className="App-header">
+            {isLoginView ? (<h1>Login</h1>) : (<h1>Register</h1>)}
+          </header>
           <label htmlFor="username">Username</label><br />
           <input id="username" type="text" placeholder="username" value={username} 
           onChange={evt => setUsername(evt.target.value)} /><br />
@@ -52,12 +55,12 @@ function Auth(){
           onChange={evt => setPassword(evt.target.value)} /><br />
           {isLoginView ? (
             <>
-            <button onClick={loginClicked}>Login</button>
+            <button className="clickable" onClick={loginClicked} disabled={isDisabled}>Login</button>
             <p>Don't have an account? Register <span className="link clickable" onClick={() => setIsLoginView(false)}>here!</span></p>
             </>
           ) : (
             <>
-            <button onClick={registerClicked}>Register</button>
+            <button className="clickable" onClick={registerClicked} disabled={isDisabled}>Register</button>
             <p>Already have an account? Sign in <span className="link clickable" onClick={() => setIsLoginView(true)}>here!</span></p>
             </>
           ) }

@@ -16,7 +16,6 @@
 .App-header {
   text-align: center;
   font-size: calc(10px + 2vmin);
-  
   background-color: #282c34;
 }
 
@@ -50,16 +49,52 @@
   margin: 16px 5px;
 }
 
-.centerMe{
-  text-align: center;
+.login{
+  /* text-align: center; */
+  width: 50%;
+  margin: 0 25%;
+  font-size: 1.2rem;
+  /* border: 1px solid red; */
 }
 
-.login{
-  text-align: center;
+input, textarea{
+  width: 95%;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 1.2rem;
+}
+
+button{
+  color:#444;
+  background-color: #f3f3f3;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  outline: none;
+}
+
+button:disabled{
+  color:#f3f3f3;
+  background-color: #444;
+  cursor:not-allowed;
 }
 
 .link{
   text-decoration: green underline;
   color: green;
+
+}
+
+.logo{
+  padding: 0 10px;
+  transform: rotate(30deg);
+}
+
+.signOut{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
 
 }

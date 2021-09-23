@@ -4,6 +4,8 @@ import MovieList from './components/movie-list';
 import MovieDetails from './components/movie-details';
 import MovieForm from './components/movie-form';
 import { useCookies } from 'react-cookie';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFilm, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 
 function App() {
@@ -11,7 +13,9 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
   const [editedMovie, setEditedMovie] =  useState(null);
-  const [token] = useCookies(['token']);
+  //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
+  // blank setToken since we don't need it in this component
+  const [token, , deleteToken] = useCookies(['token']);
 
   // raises CORS error
   // use this django app to fix
@@ -35,6 +39,7 @@ function App() {
   useEffect(() => {
     // our token object has a propterty of token: '' inside.
     // so have to check token['token']
+    // since token changes this redirect triggers
     console.log(token);
     if(!token['token']) {
       window.location.href = "/";
@@ -95,15 +100,23 @@ function App() {
     setSelectedMovie(null);
   }
 
+  const logoutUser = () =>{
+    deleteToken(['token']);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>MOVIE RATER</h1>
+        <h1>
+          <FontAwesomeIcon className="logo" icon={faFilm} />
+          <span>Movie Rater</span>
+        </h1>
+        <FontAwesomeIcon className="signOut clickable" icon={faSignOutAlt} onClick={logoutUser}/>
       </header>
       <div className="layout">
         <div>
           <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked} deleteClicked={deleteClicked}/>
-          <button onClick={newMovie}>New Movie</button>
+          <button className="clickable" onClick={newMovie}>New Movie</button>
         </div>
         <MovieDetails movie={selectedMovie} updateMovie={loadMovie}/>
         {editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie} movieCreated={movieCreated}/> : null}

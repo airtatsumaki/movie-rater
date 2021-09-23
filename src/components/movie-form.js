@@ -7,6 +7,7 @@ function MovieForm(props){
   const [title, setTitle] = useState(props.movie.title);
   const [description, setDescription] = useState(props.movie.description);
   const [token] = useCookies(['token']);
+  const isDisabled = title.length === 0 || description.length === 0;
   // even tho props.movie changes the title and desc remain as default
   // this triggers the change of state (when edit button is clicked)
   // and updates title and desc based on the correct movie
@@ -41,9 +42,9 @@ function MovieForm(props){
         onChange={evt => setDescription(evt.target.value)}></textarea><br />
         {
           props.movie.id ? (
-            <button onClick={updateClicked}>Update</button>
+            <button className="clickable" onClick={updateClicked} disabled={isDisabled}>Update</button>
           ) :(
-            <button onClick={createClicked}>Create</button>
+            <button className="clickable" onClick={createClicked} disabled={isDisabled}>Create</button>
           )
         }
         
