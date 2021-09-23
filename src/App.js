@@ -61,14 +61,14 @@ function App() {
     setSelectedMovie(theMovie);
     setEditedMovie(null);
     setRefreshMovies(true);
-    console.log("refreshMovies is : " + refreshMovies);
+    // console.log("refreshMovies is : " + refreshMovies);
   }
 
   const editClicked = theMovie => {
     setEditedMovie(theMovie);
     setSelectedMovie(null);
     setRefreshMovies(true);
-    console.log("refreshMovies is : " + refreshMovies);
+    // console.log("refreshMovies is : " + refreshMovies);
     //console.log(editedMovie);
   }
 
