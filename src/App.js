@@ -14,7 +14,6 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] =  useState(null);
   const [editedMovie, setEditedMovie] =  useState(null);
-  const [refreshMovies, setRefreshMovies] =  useState(false);
   //const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
   // blank setToken since we don't need it in this component
   const [token, , deleteToken] = useCookies(['token']);
@@ -29,7 +28,6 @@ function App() {
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
   useEffect(()=>{
-    console.log("refresh movies list");
     fetch("http://127.0.0.1:8000/api/movies/",{
       method: 'GET', 
       headers: {
@@ -39,12 +37,11 @@ function App() {
     })
     .then(resp => resp.json())
     .then(resp => setMovies(resp))
-    .then(() => setRefreshMovies(false))
     .catch(error => console.log(error))
     //added editedMovie and selectedMovie to render
     //dependencies. Otherwise the move list/ details would 
     //on rerender on page refresh
-  },[token, refreshMovies]);
+  },[token]);
 
   useEffect(() => {
     // our token object has a propterty of token: '' inside.
@@ -60,15 +57,11 @@ function App() {
   const loadMovie = theMovie => {
     setSelectedMovie(theMovie);
     setEditedMovie(null);
-    setRefreshMovies(true);
-    // console.log("refreshMovies is : " + refreshMovies);
   }
 
   const editClicked = theMovie => {
     setEditedMovie(theMovie);
     setSelectedMovie(null);
-    setRefreshMovies(true);
-    // console.log("refreshMovies is : " + refreshMovies);
     //console.log(editedMovie);
   }
 
@@ -79,8 +72,8 @@ function App() {
       }
       return movie;
     })
+    setSelectedMovie(theMovie);
     setMovies(newMovies);
-    setRefreshMovies(true);
   }
 
   const newMovie = () => {
@@ -93,7 +86,7 @@ function App() {
   const movieCreated = theMovie => {
     const newMovies = [...movies,theMovie];
     setMovies(newMovies);
-    
+    setEditedMovie(null);
   }
 
   // const deleteClicked = theMovie => {
@@ -135,7 +128,7 @@ function App() {
           <MovieList movies={movies} movieClicked={loadMovie} editClicked={editClicked} deleteClicked={deleteClicked}/>
           <button className="clickable" onClick={newMovie}>New Movie</button>
         </div>
-        <MovieDetails movie={selectedMovie} updateMovie={loadMovie}/>
+        <MovieDetails movie={selectedMovie} updateMovie={updatedMovie}/>
         {editedMovie ? <MovieForm movie={editedMovie} updatedMovie={updatedMovie} movieCreated={movieCreated}/> : null}
       </div>
     </div>
