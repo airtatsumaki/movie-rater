@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar as blankStar } from '@fortawesome/free-regular-svg-icons'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
 import { useCookies } from 'react-cookie';
+import { API } from '../api-service';
 
 function MovieDetails(props){
 	const theMovie = props.movie;
@@ -26,30 +27,19 @@ function MovieDetails(props){
 		);
 	}
 	const rateClicked = rate => evt =>{
-		//using `` means you can pipe in dynamic variables
-		fetch(`http://127.0.0.1:8000/api/movies/${theMovie.id}/rate_movie/`,{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Token ${token['token']}`,
-			},
-			body: JSON.stringify({stars: rate})
-		})
+		API.rateMovie(theMovie.id, {stars: rate}, token['token'])
+		.then(console.log("this is the new ratemovie function"))
 		.then(() => getDetailes())
 		.catch(error => console.log(error))
 	}
+	
 	const getDetailes = () => {
-		fetch(`http://127.0.0.1:8000/api/movies/${theMovie.id}/`,{
-			method: 'GET',
-			headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Token ${token['token']}`,
-			}
-		})
-		.then(resp => resp.json())
+		API.getMovieDetails(theMovie.id, token['token'])
 		.then(resp => props.updateMovie(resp))
+		.then(console.log("this is the new getDetailes calls"))
 		.catch(error => console.log(error))
 	}
+
 	const renderRateStars = () => {
 		return (
 			[...Array(5)].map((e,i) => {

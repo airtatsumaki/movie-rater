@@ -74,6 +74,8 @@ function App() {
     })
     setSelectedMovie(theMovie);
     setMovies(newMovies);
+    setEditedMovie(null);
+    //when update is clicked the update box doesn't dissappear.
   }
 
   const newMovie = () => {
