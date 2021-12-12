@@ -1,5 +1,5 @@
 //const TOKEN = 'be17769c2231b85acef4e73dd24721b2ef2fef34'
-const APIPath = process.env.REACT_APP_API_LOCAL;
+const APIPath = process.env.REACT_APP_API_PUBLIC;
 console.log(`APIPath value is : ${APIPath}`);
 
 export class API{

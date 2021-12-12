@@ -6,6 +6,7 @@ import MovieForm from './components/movie-form';
 import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilm, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { API } from './api-service';
 // import { useFetch } from './hooks/useFetch';
 
 
@@ -28,14 +29,15 @@ function App() {
   // use this django app to fix
   // https://github.com/adamchainz/django-cors-headers
   useEffect(()=>{
-    fetch("http://127.0.0.1:8000/api/movies/",{
-      method: 'GET', 
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${token['token']}`,
-      }
-    })
-    .then(resp => resp.json())
+    // fetch("http://127.0.0.1:8000/api/movies/",{
+    //   method: 'GET', 
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Token ${token['token']}`,
+    //   }
+    // })
+    // .then(resp => resp.json())
+    API.getMovies(token['token'])
     .then(resp => setMovies(resp))
     .catch(error => console.log(error))
     //added editedMovie and selectedMovie to render
